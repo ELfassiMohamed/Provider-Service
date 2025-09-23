@@ -2,6 +2,7 @@ package com.provider_service.models;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Document(collection = "providers")
 public class Provider implements UserDetails{
 	    @Id
-	    private String id;
+	    private String providerID;
 	    
 		@Indexed(unique = true)
 	    private String email;
@@ -27,6 +28,18 @@ public class Provider implements UserDetails{
 	    private boolean accountNonExpired = true;
 	    private boolean accountNonLocked = true;
 	    private boolean credentialsNonExpired = true;
+	    
+	 // Core Professional Information
+	    private String fullName;
+	    private String professionalTitle;
+	    private String specialty;
+	    private List<String> subSpecialties;
+	    private List<String> stateLicenses;
+	    
+	 // Practice and Contact Information
+	    private String primaryClinicName;
+	    private String clinicAddress;
+	    private String contactNumber;
 	    
 	    public Provider() {
 			super();
@@ -71,11 +84,11 @@ public class Provider implements UserDetails{
 	    
 	    // Getters and Setters
 	    public String getId() {
-	        return id;
+	        return providerID;
 	    }
 	    
-	    public void setId(String id) {
-	        this.id = id;
+	    public void setId(String providerID) {
+	        this.providerID = providerID;
 	    }
 	    
 	    public String getEmail() {
@@ -110,5 +123,80 @@ public class Provider implements UserDetails{
 	    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
 	        this.credentialsNonExpired = credentialsNonExpired;
 	    }
+
+		public String getFullName() {
+			return fullName;
+		}
+
+		public void setFullName(String fullName) {
+			this.fullName = fullName;
+		}
+
+		public String getProfessionalTitle() {
+			return professionalTitle;
+		}
+
+		public void setProfessionalTitle(String professionalTitle) {
+			this.professionalTitle = professionalTitle;
+		}
+
+		public String getSpecialty() {
+			return specialty;
+		}
+
+		public void setSpecialty(String specialty) {
+			this.specialty = specialty;
+		}
+
+		public List<String> getSubSpecialties() {
+			return subSpecialties;
+		}
+
+		public void setSubSpecialties(List<String> subSpecialties) {
+			this.subSpecialties = subSpecialties;
+		}
+
+		public List<String> getStateLicenses() {
+			return stateLicenses;
+		}
+
+		public void setStateLicenses(List<String> stateLicenses) {
+			this.stateLicenses = stateLicenses;
+		}
+
+		public String getPrimaryClinicName() {
+			return primaryClinicName;
+		}
+
+		public void setPrimaryClinicName(String primaryClinicName) {
+			this.primaryClinicName = primaryClinicName;
+		}
+
+		public String getClinicAddress() {
+			return clinicAddress;
+		}
+
+		public void setClinicAddress(String clinicAddress) {
+			this.clinicAddress = clinicAddress;
+		}
+
+		public String getContactNumber() {
+			return contactNumber;
+		}
+
+		public void setContactNumber(String contactNumber) {
+			this.contactNumber = contactNumber;
+		}
+		
+		// Helper method to check if profile is complete
+		public boolean isProfileComplete() {
+		    return fullName != null &&
+		           professionalTitle != null &&
+		           specialty != null &&
+		           stateLicenses != null && !stateLicenses.isEmpty() &&
+		           primaryClinicName != null &&
+		           clinicAddress != null &&
+		           contactNumber != null;
+		}
 	    
 }

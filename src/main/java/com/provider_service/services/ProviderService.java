@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.provider_service.dto.ProfileCompletionRequest;
 import com.provider_service.models.Provider;
 import com.provider_service.repository.ProviderRepository;
 @Service
@@ -34,6 +35,26 @@ public class ProviderService implements UserDetailsService{
 
 	    return providerRepository.save(provider);
 	}
+	
+	// Complete provider profile (provider fills this)
+    public Provider completeProviderProfile(String providerId, ProfileCompletionRequest request) {
+        Provider provider = providerRepository.findById(providerId)
+            .orElseThrow(() -> new RuntimeException("Provider not found with ID: " + providerId));
+
+        // Update provider information
+        provider.setFullName(request.getFullName());
+        provider.setProfessionalTitle(request.getProfessionalTitle());
+        provider.setSpecialty(request.getSpecialty());
+        provider.setSubSpecialties(request.getSubSpecialties());
+        provider.setStateLicenses(request.getStateLicenses());
+        provider.setPrimaryClinicName(request.getPrimaryClinicName());
+        provider.setClinicAddress(request.getClinicAddress());
+        provider.setContactNumber(request.getContactNumber());
+
+        Provider savedProvider = providerRepository.save(provider);
+
+        return savedProvider;
+    }
 
 	public Provider findByEmail(String email) {
 	    return providerRepository.findByEmail(email)

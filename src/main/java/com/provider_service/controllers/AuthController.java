@@ -7,12 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.provider_service.dto.AuthRequest;
 import com.provider_service.dto.AuthResponse;
+import com.provider_service.dto.ProfileCompletionRequest;
+import com.provider_service.dto.ProviderProfileDTO;
 import com.provider_service.dto.RegisterRequest;
 import com.provider_service.models.Provider;
 import com.provider_service.services.JwtService;
@@ -67,5 +70,34 @@ public class AuthController {
 	    Provider provider = (Provider) authentication.getPrincipal();
 	    return ResponseEntity.ok(provider);
 	}
+	
+	@PutMapping("/complete-profile")
+    public ResponseEntity<ProviderProfileDTO> completeProfile(
+            @RequestBody ProfileCompletionRequest  profileUpdates, 
+            Authentication authentication) {
+        try {
+            Provider currentProvider = (Provider) authentication.getPrincipal();
+            Provider updatedProvider = providerService.completeProviderProfile(currentProvider.getId(), profileUpdates);
+            ProviderProfileDTO profileDTO = convertToProfileDTO(updatedProvider);
+            return ResponseEntity.ok(profileDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+	
+    private ProviderProfileDTO convertToProfileDTO(Provider provider) {
+        ProviderProfileDTO dto = new ProviderProfileDTO();
+        dto.setProviderID(provider.getId());
+        dto.setEmail(provider.getEmail());
+        dto.setFullName(provider.getFullName());
+        dto.setProfessionalTitle(provider.getProfessionalTitle());
+        dto.setSpecialty(provider.getSpecialty());
+        dto.setSubSpecialties(provider.getSubSpecialties());
+        dto.setStateLicenses(provider.getStateLicenses());
+        dto.setPrimaryClinicName(provider.getPrimaryClinicName());
+        dto.setClinicAddress(provider.getClinicAddress());
+        dto.setContactNumber(provider.getContactNumber());
+        return dto;
+    }
 
 }
