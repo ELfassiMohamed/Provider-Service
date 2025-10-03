@@ -34,7 +34,7 @@ public class ProviderPatientService {
         
         rabbitTemplate.convertAndSend(
                 RabbitConfig.PATIENT_EXCHANGE,
-                RabbitConfig.PATIENT_STATUS_ROUTING_KEY,
+                RabbitConfig.PATIENT_SYNC_RESPONSE_ROUTING_KEY,
                 message
         );
         

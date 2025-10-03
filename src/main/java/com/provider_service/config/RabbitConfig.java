@@ -17,6 +17,8 @@ public class RabbitConfig {
     public static final String PATIENT_STATUS_ROUTING_KEY = "patient.status.update";
     public static final String PATIENT_SYNC_QUEUE = "patient.sync.queue";
     public static final String PATIENT_SYNC_ROUTING_KEY = "patient.sync.request";
+    public static final String PATIENT_SYNC_RESPONSE_QUEUE = "patient.sync.response.queue";
+    public static final String PATIENT_SYNC_RESPONSE_ROUTING_KEY = "patient.sync.response";
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
@@ -37,6 +39,11 @@ public class RabbitConfig {
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter());
         return factory;
+    }
+    
+    @Bean
+    public Queue patientSyncResponseQueue() {
+        return QueueBuilder.durable(PATIENT_SYNC_RESPONSE_QUEUE).build();
     }
 
     // Exchange
@@ -71,6 +78,14 @@ public class RabbitConfig {
                 .bind(patientSyncQueue())
                 .to(patientExchange())
                 .with(PATIENT_SYNC_ROUTING_KEY);
+    }
+    
+    @Bean
+    public Binding patientSyncResponseBinding() {
+        return BindingBuilder
+                .bind(patientSyncResponseQueue())
+                .to(patientExchange())
+                .with(PATIENT_SYNC_RESPONSE_ROUTING_KEY);
     }
 }
 

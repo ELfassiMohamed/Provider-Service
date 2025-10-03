@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class ProviderPatientController {
 
-    private final ProviderPatientService providerPatientService;
+	private final ProviderPatientService providerPatientService;
 
     @GetMapping("/patients")
     public ResponseEntity<List<PatientDTO>> getPatients(
