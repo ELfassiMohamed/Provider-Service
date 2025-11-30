@@ -43,7 +43,7 @@ public class AuthController {
 	        Provider provider = providerService.registerProvider(request.getEmail(), request.getPassword());
 	        String token = jwtService.generateToken(provider);
 
-	        return ResponseEntity.ok(new AuthResponse(token, "Registration successful", provider.getEmail()));
+	        return ResponseEntity.ok(new AuthResponse(token, "Registration successful", provider.getEmail(), provider.getRole().getAuthority()));
 	    } catch (Exception e) {
 	        return ResponseEntity.badRequest().body(new AuthResponse(null, "Registration failed: " + e.getMessage(), null));
 	    }
@@ -59,7 +59,7 @@ public class AuthController {
 	        Provider provider = (Provider) authentication.getPrincipal();
 	        String token = jwtService.generateToken(provider);
 
-	        return ResponseEntity.ok(new AuthResponse(token, "Login successful", provider.getEmail()));
+	        return ResponseEntity.ok(new AuthResponse(token, "Login successful", provider.getEmail(),provider.getRole().getAuthority()));
 	    } catch (Exception e) {
 	        return ResponseEntity.badRequest().body(new AuthResponse(null, "Invalid credentials", null));
 	    }
